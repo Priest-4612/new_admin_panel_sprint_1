@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+from split_settings.tools import include
 
 load_dotenv()
 
@@ -11,9 +12,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('APP_KEY', None)
 
-DEBUG = os.environ.get('APP_DEBUG', False)
+DEBUG = os.environ.get('APP_DEBUG', False) == 'True'
 
-ALLOWED_HOSTS = os.environ.get('APP_URL', '*')
+ALLOWED_HOSTS = os.environ.get('APP_URL', ['127.0.0.1'])
+
+include(
+    'components/database.py',
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -53,13 +58,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
