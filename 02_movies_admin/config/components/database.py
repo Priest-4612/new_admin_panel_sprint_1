@@ -1,3 +1,5 @@
+"""Файл конфигурации проекта."""
+
 import os
 
 default_engine = 'django.db.backends.postgresql'

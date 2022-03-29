@@ -6,3 +6,5 @@ wemake-python-styleguide==0.16.1
 flake8-bandit==2.1.2
 bandit==1.7.2
 python-dotenv==0.20
+psycopg2-binary==2.9
+django-split-settings==1.1
