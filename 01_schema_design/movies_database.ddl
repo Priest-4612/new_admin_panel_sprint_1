@@ -1,4 +1,6 @@
 CREATE SCHEMA IF NOT EXISTS content;
+ALTER ROLE app SET search_path TO content,public;
+
 
 CREATE TABLE IF NOT Exists content.film_work (
     id uuid PRIMARY KEY,
