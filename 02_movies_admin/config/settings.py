@@ -10,11 +10,11 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('APP_KEY', None)
+SECRET_KEY = os.getenv('APP_KEY')
 
-DEBUG = os.environ.get('APP_DEBUG', False) == 'True'
+DEBUG = os.getenv('APP_DEBUG', default=False) == 'True'
 
-ALLOWED_HOSTS = os.environ.get('APP_URL', '127.0.0.1').split(', ')
+ALLOWED_HOSTS = os.getenv('APP_URL', '127.0.0.1').split(', ')
 
 include(
     'components/apps.py',
