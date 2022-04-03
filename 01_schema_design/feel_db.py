@@ -10,10 +10,10 @@ fake = Faker()
 
 # Подготавливаем DSN (Data Source Name) для подключения к БД Postgres
 dsn = {
-    'dbname': 'movies_database',
+    'dbname': 'movies_database_1',
     'user': 'app',
     'password': '123qwe',
-    'host': 'localhost',
+    'host': '192.168.250.10',
     'port': 5432,
     'options': '-c search_path=content',
 }

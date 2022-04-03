@@ -8,3 +8,5 @@ FROM generate_series(
   '2021-01-01'::DATE,
   '1 hour'::interval
 ) date;
+
+\copy content.film_work from '/output.csv' with delimiter ',' NULL as '';
