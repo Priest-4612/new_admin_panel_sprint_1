@@ -1,7 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS content;
 ALTER ROLE app SET search_path TO content, public;
 
-CREATE TABLE "content"."film_work" (
+CREATE TABLE IF NOT EXISTS "content"."film_work" (
     "id" uuid NOT NULL PRIMARY KEY,
     "title" VARCHAR(255) NOT NULL,
     "description" TEXT,
@@ -12,7 +12,7 @@ CREATE TABLE "content"."film_work" (
     "modified" TIMESTAMP with time zone
 );
 
-CREATE TABLE "content"."genre" (
+CREATE TABLE IF NOT EXISTS "content"."genre" (
     "id" uuid NOT NULL PRIMARY KEY,
     "name" VARCHAR(255) NOT NULL,
     "description" TEXT NOT NULL,
@@ -20,14 +20,14 @@ CREATE TABLE "content"."genre" (
     "modified" TIMESTAMP with time zone
 );
 
-CREATE TABLE "content"."person" (
+CREATE TABLE IF NOT EXISTS "content"."person" (
     "id" uuid NOT NULL PRIMARY KEY,
     "full_name" VARCHAR(255) NOT NULL,
     "created" TIMESTAMP with time zone,
     "modified" TIMESTAMP with time zone
 );
 
-CREATE TABLE "content"."person_film_work" (
+CREATE TABLE IF NOT EXISTS "content"."person_film_work" (
     "id" uuid NOT NULL PRIMARY KEY,
     "person_id" uuid NOT NULL,
     "film_work_id" uuid NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE "content"."person_film_work" (
     "created" TIMESTAMP with time zone
 );
 
-CREATE TABLE "content"."genre_film_work" (
+CREATE TABLE IF NOT EXISTS "content"."genre_film_work" (
     "id" uuid NOT NULL PRIMARY KEY,
     "film_work_id" uuid NOT NULL,
     "genre_id" uuid NOT NULL,
