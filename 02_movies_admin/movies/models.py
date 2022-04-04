@@ -82,6 +82,7 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
     creation_date = models.DateField(
         verbose_name=_('creation date'),
         db_index=True,
+        blank=True,
         null=True,
     )
     rating = models.PositiveIntegerField(
