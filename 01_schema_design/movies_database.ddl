@@ -6,25 +6,25 @@ CREATE TABLE IF NOT EXISTS "content"."film_work" (
     "title" TEXT NOT NULL,
     "description" TEXT,
     "creation_date" DATE,
-    "rating" FLOAT CHECK ("rating" >= 0),
+    "rating" INTEGER CHECK ("rating" >= 0),
     "type" TEXT NOT NULL,
-    "created" TIMESTAMP WITH TIME ZONE,
-    "modified" TIMESTAMP WITH TIME ZONE
+    "created" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    "modified" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS "content"."genre" (
     "id" uuid NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "description" TEXT,
-    "created" TIMESTAMP WITH TIME ZONE,
-    "modified" TIMESTAMP WITH TIME ZONE
+    "created" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    "modified" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS "content"."person" (
     "id" uuid NOT NULL PRIMARY KEY,
     "full_name" TEXT NOT NULL,
-    "created" TIMESTAMP WITH TIME ZONE,
-    "modified" TIMESTAMP WITH TIME ZONE
+    "created" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    "modified" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS "content"."person_film_work" (
@@ -32,14 +32,14 @@ CREATE TABLE IF NOT EXISTS "content"."person_film_work" (
     "person_id" uuid NOT NULL,
     "film_work_id" uuid NOT NULL,
     "role" TEXT NOT NULL,
-    "created" TIMESTAMP WITH TIME ZONE
+    "created" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS "content"."genre_film_work" (
     "id" uuid NOT NULL PRIMARY KEY,
     "film_work_id" uuid NOT NULL,
     "genre_id" uuid NOT NULL,
-    "created" TIMESTAMP WITH TIME ZONE
+    "created" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Создаю связи между таблицами
