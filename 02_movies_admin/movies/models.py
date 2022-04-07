@@ -40,7 +40,7 @@ class TimeStampedMixin(models.Model):
 
 
 class Genre(UUIDMixin, TimeStampedMixin):
-    name = models.CharField(
+    name = models.TextField(
         verbose_name=_('name'),
         max_length=CONSTRAINT_LENGTH,
     )
@@ -69,7 +69,7 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
         MOVIE = _('movie')
         TV_SHOW = _('tv_show')
 
-    title = models.CharField(
+    title = models.TextField(
         verbose_name=_('title'),
         max_length=CONSTRAINT_LENGTH,
         db_index=True,
@@ -94,7 +94,7 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
             MaxValueValidator(CONSTRAINT_RATING_MAX),
         ],
     )
-    type = models.CharField(
+    type = models.TextField(
         verbose_name=_('type'),
         max_length=CONSTRAINT_LENGTH,
         choices=Type.choices,
@@ -122,7 +122,7 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
 
 
 class Person(UUIDMixin, TimeStampedMixin):
-    full_name = models.CharField(
+    full_name = models.TextField(
         verbose_name=_('full name'),
         max_length=CONSTRAINT_LENGTH,
     )
@@ -186,7 +186,7 @@ class PersonFilmWork(UUIDMixin):
         to='Filmwork',
         on_delete=models.CASCADE,
     )
-    role = models.CharField(
+    role = models.TextField(
         verbose_name=_('role'),
         max_length=CONSTRAINT_LENGTH,
         choices=Role.choices,
