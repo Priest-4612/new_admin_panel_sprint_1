@@ -5,7 +5,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-CONSTRAINT_LENGTH = 255
 CONSTRAINT_RATING_MIN = 0
 CONSTRAINT_RATING_MAX = 100
 
@@ -41,12 +40,12 @@ class TimeStampedMixin(models.Model):
 
 class Genre(UUIDMixin, TimeStampedMixin):
     name = models.TextField(
-        verbose_name=_('name'),
-        max_length=CONSTRAINT_LENGTH,
+        verbose_name=_('name')
     )
     description = models.TextField(
         verbose_name=_('description'),
         blank=True,
+        null=True
     )
 
     class Meta(object):
@@ -71,7 +70,6 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
 
     title = models.TextField(
         verbose_name=_('title'),
-        max_length=CONSTRAINT_LENGTH,
         db_index=True,
     )
     description = models.TextField(
@@ -96,7 +94,6 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
     )
     type = models.TextField(
         verbose_name=_('type'),
-        max_length=CONSTRAINT_LENGTH,
         choices=Type.choices,
         default=Type.MOVIE,
         db_index=True,
@@ -123,8 +120,7 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
 
 class Person(UUIDMixin, TimeStampedMixin):
     full_name = models.TextField(
-        verbose_name=_('full name'),
-        max_length=CONSTRAINT_LENGTH,
+        verbose_name=_('full name')
     )
 
     class Meta(object):
@@ -138,13 +134,13 @@ class Person(UUIDMixin, TimeStampedMixin):
 
 class GenreFilmwork(UUIDMixin):
     genre = models.ForeignKey(
-        verbose_name=_('genre'),
         to='Genre',
+        verbose_name=_('genre'),
         on_delete=models.CASCADE,
     )
     film_work = models.ForeignKey(
-        verbose_name=_('filmwork'),
         to='Filmwork',
+        verbose_name=_('filmwork'),
         on_delete=models.CASCADE,
     )
     created = models.DateTimeField(
@@ -155,7 +151,7 @@ class GenreFilmwork(UUIDMixin):
     class Meta(object):
         db_table = template_tablename.format(tablename='genre_film_work')
         verbose_name = _('genre filmwork')
-        verbose_name_plural = _('genre filmwork')
+        verbose_name_plural = _('genres filmwork')
         constraints = [
             models.UniqueConstraint(
                 name='unique_genre_film_work',
@@ -188,7 +184,6 @@ class PersonFilmWork(UUIDMixin):
     )
     role = models.TextField(
         verbose_name=_('role'),
-        max_length=CONSTRAINT_LENGTH,
         choices=Role.choices,
         default=Role.ACTOR,
     )
@@ -200,7 +195,7 @@ class PersonFilmWork(UUIDMixin):
     class Meta(object):
         db_table = template_tablename.format(tablename='person_film_work')
         verbose_name = _('person filmwork')
-        verbose_name_plural = _('person filmwork')
+        verbose_name_plural = _('persons filmwork')
         constraints = [
             models.UniqueConstraint(
                 name='unique_film_work_person',
