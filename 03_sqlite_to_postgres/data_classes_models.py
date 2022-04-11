@@ -1,24 +1,25 @@
-from datetime import date
+import datetime
 import uuid
 from dataclasses import dataclass, field
 
 
 @dataclass
 class Genre:
+    id: uuid.UUID = field(default_factory=uuid.uuid4)
     name: str
     description: str
-    id: uuid.UUID = field(default_factory=uuid.uuid4)
+    created: datetime.datetime
+    modified: datetime.datetime
 
 
 @dataclass
 class Filmwork:
+    id: uuid.UUID = field(default_factory=uuid.uuid4)
     title: str
     descriptions: str
-    creation_date: date
+    creation_date: datetime.date
     rating: float = field(dafault=0.0)
     type: str
-    genres
-    id: uuid.UUID = field(default_factory=uuid.uuid4)
 
 
 @dataclass

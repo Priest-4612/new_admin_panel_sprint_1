@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 CONSTRAINT_RATING_MIN = 0
-CONSTRAINT_RATING_MAX = 100
+CONSTRAINT_RATING_MAX = 10.0
 
 template_tablename = 'content\".\"{tablename}'
 
@@ -40,12 +40,12 @@ class TimeStampedMixin(models.Model):
 
 class Genre(UUIDMixin, TimeStampedMixin):
     name = models.TextField(
-        verbose_name=_('name')
+        verbose_name=_('name'),
     )
     description = models.TextField(
         verbose_name=_('description'),
         blank=True,
-        null=True
+        null=True,
     )
 
     class Meta(object):
@@ -54,9 +54,12 @@ class Genre(UUIDMixin, TimeStampedMixin):
         verbose_name_plural = _('genres')
         constraints = [
             models.UniqueConstraint(
-                name='uneque_genre_name',
+                name='uneque_genre_name_idx',
                 fields=['name'],
             ),
+        ]
+        indexes = [
+            models.Index(fields=['name'], name='genre_name_idx'),
         ]
 
     def __str__(self):
@@ -70,7 +73,6 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
 
     title = models.TextField(
         verbose_name=_('title'),
-        db_index=True,
     )
     description = models.TextField(
         verbose_name=_('description'),
@@ -79,11 +81,10 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
     )
     creation_date = models.DateField(
         verbose_name=_('creation date'),
-        db_index=True,
         blank=True,
         null=True,
     )
-    rating = models.PositiveIntegerField(
+    rating = models.FloatField(
         verbose_name=_('rating'),
         blank=True,
         null=True,
@@ -96,7 +97,6 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
         verbose_name=_('type'),
         choices=Type.choices,
         default=Type.MOVIE,
-        db_index=True,
     )
     genres = models.ManyToManyField(
         verbose_name=_('genres'),
@@ -113,6 +113,20 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
         db_table = template_tablename.format(tablename='film_work')
         verbose_name = _('movie')
         verbose_name_plural = _('movies')
+        indexes = [
+            models.Index(
+                fields=['creation_date'],
+                name='film_work_creation_date_idx',
+            ),
+            models.Index(
+                fields=['title'],
+                name='filmwork_title_idx',
+            ),
+            models.Index(
+                fields=['type'],
+                name='filmwork_type_idx',
+            ),
+        ]
 
     def __str__(self):
         return self.title
@@ -120,7 +134,7 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
 
 class Person(UUIDMixin, TimeStampedMixin):
     full_name = models.TextField(
-        verbose_name=_('full name')
+        verbose_name=_('full name'),
     )
 
     class Meta(object):
@@ -198,8 +212,14 @@ class PersonFilmWork(UUIDMixin):
         verbose_name_plural = _('persons filmwork')
         constraints = [
             models.UniqueConstraint(
-                name='unique_film_work_person',
-                fields=('film_work_id', 'person_id'),
+                fields=('film_work_id', 'person_id', 'role'),
+                name='unique_film_work_person_role_idx',
+            ),
+        ]
+        indexes = [
+            models.Index(
+                fields=['film_work_id', 'person_id'],
+                name='film_work_person_idx',
             ),
         ]
 
