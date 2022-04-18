@@ -1,9 +1,12 @@
-"""Объявление моделей приложения фильмы."""
-import uuid
-
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from movies.models_mixin import (  # isort:skip
+    UUIDMixin,
+    CreatedMixin,
+    TimeStampedMixin,
+)
 
 CONSTRAINT_RATING_MIN = 0
 CONSTRAINT_RATING_MAX = 10.0
@@ -11,31 +14,15 @@ CONSTRAINT_RATING_MAX = 10.0
 template_tablename = 'content\".\"{tablename}'
 
 
-class UUIDMixin(models.Model):
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
-    )
-
-    class Meta(object):
-        abstract = True
+class Type(models.TextChoices):
+    MOVIE = _('movie')
+    TV_SHOW = _('tv_show')
 
 
-class TimeStampedMixin(models.Model):
-    created = models.DateTimeField(
-        verbose_name=_('created'),
-        auto_now_add=True,
-        null=True,
-    )
-    modified = models.DateTimeField(
-        verbose_name=_('modified'),
-        auto_now=True,
-        null=True,
-    )
-
-    class Meta(object):
-        abstract = True
+class Role(models.TextChoices):
+    ACTOR = _('actor')
+    DIRECTOR = _('director')
+    PRODUCER = _('producer')
 
 
 class Genre(UUIDMixin, TimeStampedMixin):
@@ -67,10 +54,6 @@ class Genre(UUIDMixin, TimeStampedMixin):
 
 
 class Filmwork(UUIDMixin, TimeStampedMixin):
-    class Type(models.TextChoices):
-        MOVIE = _('movie')
-        TV_SHOW = _('tv_show')
-
     title = models.TextField(
         verbose_name=_('title'),
     )
@@ -146,7 +129,7 @@ class Person(UUIDMixin, TimeStampedMixin):
         return self.full_name
 
 
-class GenreFilmwork(UUIDMixin):
+class GenreFilmwork(UUIDMixin, CreatedMixin):
     genre = models.ForeignKey(
         to='Genre',
         verbose_name=_('genre'),
@@ -156,10 +139,6 @@ class GenreFilmwork(UUIDMixin):
         to='Filmwork',
         verbose_name=_('filmwork'),
         on_delete=models.CASCADE,
-    )
-    created = models.DateTimeField(
-        verbose_name=_('created'),
-        auto_now_add=True,
     )
 
     class Meta(object):
@@ -180,12 +159,7 @@ class GenreFilmwork(UUIDMixin):
         )
 
 
-class PersonFilmWork(UUIDMixin):
-    class Role(models.TextChoices):
-        ACTOR = _('actor')
-        DIRECTOR = _('director')
-        PRODUCER = _('producer')
-
+class PersonFilmWork(UUIDMixin, CreatedMixin):
     person = models.ForeignKey(
         verbose_name=_('person'),
         to='Person',
@@ -200,10 +174,6 @@ class PersonFilmWork(UUIDMixin):
         verbose_name=_('role'),
         choices=Role.choices,
         default=Role.ACTOR,
-    )
-    created = models.DateTimeField(
-        verbose_name=_('created'),
-        auto_now_add=True,
     )
 
     class Meta(object):
@@ -224,7 +194,8 @@ class PersonFilmWork(UUIDMixin):
         ]
 
     def __str__(self):
-        return 'Person: {person} in filmwork: {filmwork}'.format(
+        return '{role}: {person} in filmwork: {filmwork}'.format(
             person=self.person,
             filmwork=self.film_work,
+            role=self.role,
         )
