@@ -1,5 +1,12 @@
-CREATE SCHEMA IF NOT EXISTS content;
-ALTER ROLE app SET search_path TO content, public;
+ DROP TABLE IF EXISTS "content"."genre_film_work";
+ DROP TABLE IF EXISTS "content"."person_film_work";
+ DROP TABLE IF EXISTS "content"."person";
+ DROP TABLE IF EXISTS "content"."film_work";
+ DROP TABLE IF EXISTS "content"."genre";
+ DROP SCHEMA IF EXISTS "content";
+
+CREATE SCHEMA IF NOT EXISTS "content";
+ALTER ROLE app SET search_path TO "content", "public";
 
 CREATE TABLE IF NOT EXISTS "content"."genre" (
     "id" uuid NOT NULL PRIMARY KEY,
@@ -51,4 +58,3 @@ CREATE TABLE IF NOT EXISTS "content"."genre_film_work" (
     "created" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 CREATE UNIQUE INDEX "unique_genre_film_work" ON "content"."genre_film_work"("genre_id", "film_work_id");
-
