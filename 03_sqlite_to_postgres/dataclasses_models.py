@@ -2,7 +2,11 @@ import datetime
 import uuid
 from dataclasses import dataclass, field
 
-from dataclasses_mixin import UUIDMixin, TimeStampedMixin, CreatedMixin
+from dataclasses_mixin import (  # isort:skip
+    UUIDMixin,
+    TimeStampedMixin,
+    CreatedMixin,
+)
 
 
 @dataclass
