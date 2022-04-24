@@ -25,7 +25,7 @@ class GenreFilmworkInline(admin.TabularInline):
 
 
 class PersonFilmWorkInline(admin.TabularInline):
-    model = models.PersonFilmWork
+    model = models.PersonFilmwork
     autocomplete_fields = ['person']
 
 

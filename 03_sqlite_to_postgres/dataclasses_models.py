@@ -1,42 +1,40 @@
-import datetime
 import uuid
 from dataclasses import dataclass, field
 
-from dataclasses_mixin import (  # isort:skip
-    UUIDMixin,
-    TimeStampedMixin,
-    CreatedMixin,
-)
+
+@dataclass(frozen=True)
+class Genre(object):
+    name: str
+    description: str
+    id: uuid.UUID = field(default_factory=uuid.uuid4)
 
 
-@dataclass
-class Genre(UUIDMixin, TimeStampedMixin):
-    name: str = field(default=None)
-    description: str = field(default=None)
-
-
-@dataclass
-class Filmwork(UUIDMixin, TimeStampedMixin):
-    title: str = field(default=None)
-    descriptions: str = field(default=None)
-    creation_date: datetime.date = field(default=None)
-    type: str = field(default=None)
+@dataclass(frozen=True)
+class Filmwork(object):
+    title: str
+    description: str
+    creation_date: str
+    type: str
     rating: float = field(default=0)
+    id: uuid.UUID = field(default_factory=uuid.uuid4)
 
 
-@dataclass
-class Person(UUIDMixin, TimeStampedMixin):
-    fill_name: str = field(default=None)
+@dataclass(frozen=True)
+class Person(object):
+    full_name: str
+    id: uuid.UUID = field(default_factory=uuid.uuid4)
 
 
-@dataclass
-class GenreFilmwork(UUIDMixin, CreatedMixin):
-    genre: uuid.UUID = field(default=None)
-    film_work: uuid.UUID = field(default=None)
+@dataclass(frozen=True)
+class GenreFilmwork(object):
+    genre_id: uuid.UUID
+    film_work_id: uuid.UUID
+    id: uuid.UUID = field(default_factory=uuid.uuid4)
 
 
-@dataclass
-class PersonFilmWork(UUIDMixin, CreatedMixin):
-    person: uuid.UUID = field(default=None)
-    film_work: uuid.UUID = field(default=None)
-    role: str = field(default=None)
+@dataclass(frozen=True)
+class PersonFilmWork(object):
+    person_id: uuid.UUID
+    film_work_id: uuid.UUID
+    role: str
+    id: uuid.UUID = field(default_factory=uuid.uuid4)

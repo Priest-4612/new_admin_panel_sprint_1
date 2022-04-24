@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS "content"."person" (
 
 CREATE TABLE IF NOT EXISTS "content"."person_film_work" (
     "id" uuid NOT NULL PRIMARY KEY,
-    "person_id" uuid NOT NULL REFERENCES "content"."person"("id") ON DELETE CASCADE,
-    "film_work_id" uuid NOT NULL REFERENCES "content"."film_work"("id") ON DELETE CASCADE,
+    "person_id" uuid NOT NULL REFERENCES "content"."person"("id"),
+    "film_work_id" uuid NOT NULL REFERENCES "content"."film_work"("id"),
     "role" TEXT NOT NULL,
     "created" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -53,8 +53,8 @@ CREATE INDEX "film_work_person_idx" ON "content"."person_film_work"("film_work_i
 
 CREATE TABLE IF NOT EXISTS "content"."genre_film_work" (
     "id" uuid NOT NULL PRIMARY KEY,
-    "film_work_id" uuid NOT NULL REFERENCES "content"."film_work"("id") ON DELETE CASCADE,
-    "genre_id" uuid NOT NULL REFERENCES "content"."genre"("id") ON DELETE CASCADE,
+    "film_work_id" uuid NOT NULL REFERENCES "content"."film_work"("id"),
+    "genre_id" uuid NOT NULL REFERENCES "content"."genre"("id"),
     "created" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 CREATE UNIQUE INDEX "unique_genre_film_work" ON "content"."genre_film_work"("genre_id", "film_work_id");

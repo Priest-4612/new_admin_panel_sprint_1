@@ -45,12 +45,23 @@ class Genre(UUIDMixin, TimeStampedMixin):
                 fields=['name'],
             ),
         ]
-        indexes = [
-            models.Index(fields=['name'], name='genre_name_idx'),
-        ]
 
     def __str__(self):
         return self.name
+
+
+class Person(UUIDMixin, TimeStampedMixin):
+    full_name = models.TextField(
+        verbose_name=_('full name'),
+    )
+
+    class Meta(object):
+        db_table = template_tablename.format(tablename='person')
+        verbose_name = _('person')
+        verbose_name_plural = _('persons')
+
+    def __str__(self):
+        return self.full_name
 
 
 class Filmwork(UUIDMixin, TimeStampedMixin):
@@ -82,13 +93,13 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
         default=Type.MOVIE,
     )
     genres = models.ManyToManyField(
+        to=Genre,
         verbose_name=_('genres'),
-        to='Genre',
         through='GenreFilmwork',
     )
     persons = models.ManyToManyField(
+        to=Person,
         verbose_name=_('persons'),
-        to='Person',
         through='PersonFilmWork',
     )
 
@@ -115,29 +126,17 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
         return self.title
 
 
-class Person(UUIDMixin, TimeStampedMixin):
-    full_name = models.TextField(
-        verbose_name=_('full name'),
-    )
-
-    class Meta(object):
-        db_table = template_tablename.format(tablename='person')
-        verbose_name = _('person')
-        verbose_name_plural = _('persons')
-
-    def __str__(self):
-        return self.full_name
-
-
 class GenreFilmwork(UUIDMixin, CreatedMixin):
     genre = models.ForeignKey(
-        to='Genre',
+        to=Genre,
         verbose_name=_('genre'),
+        db_column='genre_id',
         on_delete=models.CASCADE,
     )
     film_work = models.ForeignKey(
-        to='Filmwork',
+        to=Filmwork,
         verbose_name=_('filmwork'),
+        db_column='film_work_id',
         on_delete=models.CASCADE,
     )
 
@@ -159,15 +158,17 @@ class GenreFilmwork(UUIDMixin, CreatedMixin):
         )
 
 
-class PersonFilmWork(UUIDMixin, CreatedMixin):
+class PersonFilmwork(UUIDMixin, CreatedMixin):
     person = models.ForeignKey(
         verbose_name=_('person'),
         to='Person',
+        db_column='person_id',
         on_delete=models.CASCADE,
     )
     film_work = models.ForeignKey(
         verbose_name=_('filmwork'),
         to='Filmwork',
+        db_column='film_work_id',
         on_delete=models.CASCADE,
     )
     role = models.TextField(

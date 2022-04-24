@@ -6,9 +6,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 from split_settings.tools import include
 
-load_dotenv()
-
 BASE_DIR = Path(__file__).resolve().parent.parent
+ENV_PATH = Path(BASE_DIR).parent.joinpath('env', '.env')
+load_dotenv(dotenv_path=ENV_PATH)
 
 SECRET_KEY = os.getenv('APP_KEY')
 
