@@ -52,7 +52,7 @@ def conn_context(db_path: str):
 
 
 if __name__ == '__main__':
-    SIZE = 1
+    SIZE = 500
     ENV_PATH = Path(__file__).resolve().parent.parent.joinpath('env', '.env')
     load_dotenv(dotenv_path=ENV_PATH)
 
