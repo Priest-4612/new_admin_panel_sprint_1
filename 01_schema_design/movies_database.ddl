@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS "content"."genre" (
     "created" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     "modified" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-CREATE INDEX "genre_name_idx" ON "content"."genre"("name");
 CREATE UNIQUE INDEX "uneque_genre_name_idx" ON "content"."genre"("name");
 
 CREATE TABLE IF NOT EXISTS "content"."film_work" (
@@ -42,8 +41,8 @@ CREATE TABLE IF NOT EXISTS "content"."person" (
 
 CREATE TABLE IF NOT EXISTS "content"."person_film_work" (
     "id" uuid NOT NULL PRIMARY KEY,
-    "person_id" uuid NOT NULL REFERENCES "content"."person"("id"),
     "film_work_id" uuid NOT NULL REFERENCES "content"."film_work"("id"),
+    "person_id" uuid NOT NULL REFERENCES "content"."person"("id"),
     "role" TEXT NOT NULL,
     "created" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

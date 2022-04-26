@@ -23,6 +23,7 @@ include(
     'components/localization.py',
     'components/password_validators.py',
     'components/templates.py',
+    'components/logger.py',
 )
 
 ROOT_URLCONF = 'config.urls'

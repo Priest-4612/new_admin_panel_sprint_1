@@ -23,6 +23,7 @@ class Role(models.TextChoices):
     ACTOR = _('actor')
     DIRECTOR = _('director')
     PRODUCER = _('producer')
+    WRITER = _('writer')
 
 
 class Genre(UUIDMixin, TimeStampedMixin):
@@ -42,7 +43,7 @@ class Genre(UUIDMixin, TimeStampedMixin):
         constraints = [
             models.UniqueConstraint(
                 name='uneque_genre_name_idx',
-                fields=['name'],
+                fields=('name',),
             ),
         ]
 
@@ -100,7 +101,7 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
     persons = models.ManyToManyField(
         to=Person,
         verbose_name=_('persons'),
-        through='PersonFilmWork',
+        through='PersonFilmwork',
     )
 
     class Meta(object):
@@ -109,15 +110,15 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
         verbose_name_plural = _('movies')
         indexes = [
             models.Index(
-                fields=['creation_date'],
+                fields=('creation_date',),
                 name='film_work_creation_date_idx',
             ),
             models.Index(
-                fields=['title'],
+                fields=('title',),
                 name='filmwork_title_idx',
             ),
             models.Index(
-                fields=['type'],
+                fields=('type',),
                 name='filmwork_type_idx',
             ),
         ]
@@ -132,6 +133,7 @@ class GenreFilmwork(UUIDMixin, CreatedMixin):
         verbose_name=_('genre'),
         db_column='genre_id',
         on_delete=models.CASCADE,
+        related_name='genres',
     )
     film_work = models.ForeignKey(
         to=Filmwork,
@@ -159,17 +161,18 @@ class GenreFilmwork(UUIDMixin, CreatedMixin):
 
 
 class PersonFilmwork(UUIDMixin, CreatedMixin):
-    person = models.ForeignKey(
-        verbose_name=_('person'),
-        to='Person',
-        db_column='person_id',
-        on_delete=models.CASCADE,
-    )
     film_work = models.ForeignKey(
         verbose_name=_('filmwork'),
         to='Filmwork',
         db_column='film_work_id',
         on_delete=models.CASCADE,
+    )
+    person = models.ForeignKey(
+        verbose_name=_('person'),
+        to='Person',
+        db_column='person_id',
+        on_delete=models.CASCADE,
+        related_name='persons',
     )
     role = models.TextField(
         verbose_name=_('role'),
@@ -189,7 +192,7 @@ class PersonFilmwork(UUIDMixin, CreatedMixin):
         ]
         indexes = [
             models.Index(
-                fields=['film_work_id', 'person_id'],
+                fields=('film_work_id', 'person_id'),
                 name='film_work_person_idx',
             ),
         ]

@@ -29,12 +29,12 @@ dataclass_dict = {
 
 
 def load_from_sqlite(
-    connection: sqlite3.Connection,
-    pg_conn: _connection,
+    sqlite_conn: sqlite3.Connection,
+    postgres_conn: _connection,
     size: 100,
 ):
-    postgres_saver = PostgresSaver(pg_conn)
-    sqlite_loader = SQLiteLoader(connection)
+    postgres_saver = PostgresSaver(postgres_conn)
+    sqlite_loader = SQLiteLoader(sqlite_conn)
 
     for table in dataclass_dict.keys():
         loader = sqlite_loader.load_data(table, dataclass_dict, size)
@@ -43,10 +43,19 @@ def load_from_sqlite(
 
 
 @contextmanager
-def conn_context(db_path: str):
+def sqlite_connector(db_path):
     conn = sqlite3.connect(db_path)
     try:
         yield conn.cursor()
+    finally:
+        conn.close()
+
+
+@contextmanager
+def postgres_connector(dsl):
+    conn = psycopg2.connect(**dsl, cursor_factory=DictCursor)
+    try:
+        yield conn
     finally:
         conn.close()
 
@@ -65,6 +74,9 @@ if __name__ == '__main__':
         'port': os.getenv('DB_PORT', '5432'),
     }
 
-    with conn_context(SQLITE_PATH) as sqlite_conn:
-        with psycopg2.connect(**dsl, cursor_factory=DictCursor) as pg_conn:
-            load_from_sqlite(sqlite_conn, pg_conn, SIZE)
+    with sqlite_connector(
+        SQLITE_PATH,
+    ) as sqlite_conn, postgres_connector(
+        dsl,
+    ) as postgres_conn:
+        load_from_sqlite(sqlite_conn, postgres_conn, SIZE)
