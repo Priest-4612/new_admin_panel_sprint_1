@@ -15,6 +15,7 @@ SECRET_KEY = os.getenv('APP_KEY')
 DEBUG = os.getenv('APP_DEBUG', default=False) == 'True'
 
 ALLOWED_HOSTS = os.getenv('APP_URL', '127.0.0.1').split(', ')
+INTERNAL_IPS = ['127.0.0.1', 'localhost']
 
 include(
     'components/apps.py',
@@ -24,6 +25,7 @@ include(
     'components/password_validators.py',
     'components/templates.py',
     'components/logger.py',
+    'components/debugging.py',
 )
 
 ROOT_URLCONF = 'config.urls'
